@@ -24,7 +24,24 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+app.get("/api/timestamp/:date_string",function(req,res){
+var dateParam = req.params.date_string;
 
+var date;
+if(/\d{5,}/.test(dateParam))
+  date = new Date(parseInt(dateParam));
+else
+  date =new Date(dateParam);
+
+  if(isNaN(date)) res.send({"error" : "Invalid Date" });
+  res.send({"unix": date.getTime(), "utc" : date.toUTCString() });
+});
+
+app.get("/api/timestamp/",function(req,res){
+  var date= new Date();
+  if(isNaN(date)) res.send({"error" : "Invalid Date" });
+  res.send({"unix": date.getTime(), "utc" : date.toUTCString() });
+});
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
